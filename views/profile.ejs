@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #15202b;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        min-height: 70vh;
+        margin: 0;
+      }
+
+      .card {
+        display: flex;
+        align-items: center;
+        background: #192734;
+        padding: 20px;
+        border-radius: 12px;
+        width: 400px;
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        margin-left: 20px;
+      }
+
+      .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40%;
+      }
+
+      .profile img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #1da1f2;
+      }
+
+      .profile a {
+        text-decoration: none;
+        color: #1da1f2;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: 0.3s;
+      }
+
+      .profile a:hover {
+        text-decoration: underline;
+      }
+
+      #toggle {
+        background: #1da1f2;
+        color: black;
+        border: none;
+        margin-top: 6px;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      #toggle:hover {
+        background: #1da1f2;
+      }
+
+      .followers_and_name_section {
+        width: 60%;
+        text-align: center;
+      }
+
+      .name p {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .followers_and_following {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+      }
+
+      .followers_and_following div {
+        text-align: center;
+      }
+
+      .followers_and_following p {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+
+      .followers p{
+        cursor: pointer;
+      }
+
+      .following p{
+        cursor: pointer;
+      }
+
+      #tweets-container {
+        width: 90%;
+        max-width: 800px;
+      }
+
+      .tweet-card {
+        background: #22303c;
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .tweet-card img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+
+      .tweet-content {
+        flex: 1;
+      }
+
+      .tweet-icons {
+        display: flex;
+        gap: 15px;
+      }
+      .tweet-icons i {
+        cursor: pointer;
+        color: #1da1f2;
+        transition: 0.3s;
+      }
+      .tweet-icons i:hover {
+        color: #0d8bf0;
+      }
+
+      .tweet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .profile-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .profile-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .tweet-time {
+        font-size: 12px;
+        color: gray;
+        text-align: right;
+      }
+      .tweet-content {
+        margin-top: 8px;
+        font-size: 16px;
+      }
+
+      .tweet-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+        color: #657786;
+      }
+
+      .tweet-actions i {
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .tweet-actions i:hover {
+        color: #1da1f2;
+      }
+
+      .like-active {
+        color: #e0245e !important;
+      }
+
+      .fa-arrow-left {
+        margin-right: 190px;
+        cursor: pointer;
+      }
+
+      .fa-arrow-left:hover {
+        color: silver;
+        opacity: 0.7;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      /* The Modal (background) */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+      }
+
+      /* Modal Content */
+      .modal-content {
+        position: relative;
+        background-color: #22303c;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 60%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+      }
+
+      /* Add Animation */
+      @-webkit-keyframes animatetop {
+        from {
+          top: -300px;
+          opacity: 0;
+        }
+        to {
+          top: 0;
+          opacity: 1;
+        }
+      }
+
+      @keyframes animatetop {
+        from {
+          top: -300px;
+          opacity: 0;
+        }
+        to {
+          top: 0;
+          opacity: 1;
+        }
+      }
+
+      /* The Close Button */
+      .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .modal-header {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+      }
+
+      .modal-body {
+        padding: 2px 16px;
+      }
+
+      .modal-footer {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+      }
+
+      tr{
+        display: flex;
+        align-items: center;
+      }
+
+      .action-links{
+        margin-left: 10px;
+      }
+
+      
+
+     
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="profile">
+        <i
+          class="fa fa-arrow-left"
+          onclick="redirectToHomePage()"
+          aria-hidden="true"
+        ></i>
+        <img src="" id="profile" alt="Profile Photo" />
+
+        <button id="toggle" onclick="toggleFollowUnfollow()">FOLLOW</button>
+      </div>
+      <div class="followers_and_name_section">
+        <div class="name">
+          <p id="full_name" class="full_name"></p>
+        </div>
+        <div class="followers_and_following">
+          <div class="tweet_number">
+            <p id="tweetsCount"></p>
+            <span>Posts</span>
+          </div>
+          <div class="followers">
+            <p id="followersCount" onclick="viewFollowersList()"></p>
+            <span>Followers</span>
+          </div>
+          <div class="following">
+            <p id="followingsCount" onclick="viewFollowingsList()"></p>
+            <span>Following</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tweets-container"></div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-body" id="followersList">
+          <span class="close">&times;</span>
+          <a id="followerslist_name"></a>
+        </div>
+      </div>
+    </div>
+
+   
+
+    <script>
+      const user_id = `<%= user_id %>`;
+
+      let follow = false;
+      let likeCount = 0;
+
+      let modal = document.getElementById("myModal");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+    
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      async function viewFollowersList() {
+        var btn = document.getElementById("followersCount");
+        modal.style.display = "block";
+        const response = await fetch(`/viewFollowersList/${user_id}`, {
+          method: "get",
+          headers: {
+            logintoken: `${localStorage.getItem("logintoken")}`,
+          },
+        });
+
+        if (response.ok) {
+        
+          const data = await response.json();
+        
+          const followersArray = data.folowersList
+
+         
+            const followersData = document.getElementById("followersList");
+            followersData.innerHTML = "";
+
+            if (followersArray.length > 0) {
+              const tableFollowers = document.createElement("table");
+
+              const rowFollowerHead = document.createElement("thead");
+              rowFollowerHead.innerHTML = `
+        
+        `;
+        tableFollowers.appendChild(rowFollowerHead);
+
+              followersArray.forEach((follower) => {
+                const view_profile_photo = `${follower.profile_photo}`;
+                
+                const updated_view_profile_photo = `${view_profile_photo}`
+                  .split("/")
+                  .slice(1)
+                  .join("/");
+                
+                const followerRow = document.createElement("tr");
+                
+                followerRow.innerHTML = `
+                
+             
+              <td><a href="/profile/${follower.user_id}" class="view-btn" style="width:30%"><img src="/${updated_view_profile_photo}" style="border-radius:50%; height:50px; width:50px;" /></a></td>
+              
+             
+              <td class="action-links" style='display:flex; justify-content:center; align-items:center'>
+                 ${follower.first_name} ${follower.last_name}
+              </td>
+          `;
+          tableFollowers.appendChild(followerRow);
+              });
+              followersData.appendChild(tableFollowers);
+            } else {
+              followersData.innerHTML = "<p>No records in followers data</p>";
+            }
+        }
+      }
+
+      
+
+      async function viewFollowingsList() {
+
+        var btn = document.getElementById("followingsCount");
+        modal.style.display = "block";
+       
+        const response = await fetch(`/viewFollowingsList/${user_id}`, {
+          method: "get",
+          headers: {
+            logintoken: `${localStorage.getItem("logintoken")}`,
+          },
+        });
+
+        if (response.ok) {
+        
+          const data = await response.json();
+      
+          const followingsArray = data.folowingsList
+
+         
+            const followingData = document.getElementById("followersList");
+            followingData.innerHTML = "";
+
+            if (followingsArray.length > 0) {
+              const tableFollowing = document.createElement("table");
+
+              const rowFollowingHead = document.createElement("thead");
+              rowFollowingHead.innerHTML = `
+        
+        `;
+        tableFollowing.appendChild(rowFollowingHead);
+
+              followingsArray.forEach((following) => {
+              
+                const view_profile_photo = `${following.profile_photo}`;
+                
+                const updated_view_profile_photo = `${view_profile_photo}`
+                  .split("/")
+                  .slice(1)
+                  .join("/");
+                
+                const followingRow = document.createElement("tr");
+                
+                followingRow.innerHTML = `
+                
+             
+              <td><a href="/profile/${following.user_id}" class="view-btn" style="width:30%"><img src="/${updated_view_profile_photo}" style="border-radius:50%; height:50px; width:50px;" /></a></td>
+              
+             
+              <td class="action-links" style='display:flex; justify-content:center; align-items:center'>
+                 ${following.first_name} ${following.last_name}
+              </td>
+          `;
+          tableFollowing.appendChild(followingRow);
+              });
+              followingData.appendChild(tableFollowing);
+            } else {
+              followingData.innerHTML = "<p>No records in student data</p>";
+            }
+        }
+      }
+
+      async function toggleFollowUnfollow() {
+        if (follow) {
+          let follower_id = user_id;
+          const response = await fetch(`/unfollow/${follower_id}`, {
+            method: "post",
+            headers: {
+              logintoken: `${localStorage.getItem("logintoken")}`,
+            },
+          });
+          if (response.ok) {
+            const is_delete = await response.json();
+           
+            if (
+              is_delete.data[is_delete.data.length - 1].is_deleted === "YES"
+            ) {
+              document.getElementById("toggle").innerHTML = "FOLLOW";
+              follow = false;
+            }
+          }
+        } else {
+          let follower_id = user_id;
+          const response = await fetch(`/follow/${follower_id}`, {
+            method: "post",
+            headers: {
+              logintoken: `${localStorage.getItem("logintoken")}`,
+            },
+          });
+          if (response.ok) {
+            const is_delete = await response.json();
+
+            
+            if (is_delete.data[is_delete.data.length - 1].is_deleted === "NO") {
+              document.getElementById("toggle").innerHTML = "UNFOLLOW";
+              follow = true;
+            }
+          }
+        }
+        fetchProfile();
+      }
+
+      async function fetchProfile() {
+        const user_data = await fetch(`/fetchProfile/${user_id}`, {
+          method: "get",
+          headers: {
+            logintoken: `${localStorage.getItem("logintoken")}`,
+          },
+        });
+
+        if (user_data.ok) {
+          const data = await user_data.json();
+         
+          const user_profile = data.user_data;
+          
+
+          checkFollowUnFollow(data.selectResult);
+          document.getElementById("followersCount").innerHTML =
+            data.followerResult.length;
+          document.getElementById("followingsCount").innerHTML =
+            data.followingResult.length;
+          document.getElementById("tweetsCount").innerHTML =
+            data.tweetResult.length;
+          displayProfile(
+            user_profile.first_name,
+            user_profile.last_name,
+            user_profile.email,
+            user_profile.profile_photo
+          );
+        } else {
+          localStorage.removeItem("logintoken");
+          alert("token expired you must login again");
+          window.location.href = "/login";
+        }
+      }
+      
+      async function checkFollowUnFollow(selectResult) {
+       
+
+        const is_unfollow = selectResult[selectResult.length - 1].is_deleted;
+      
+        if (is_unfollow === "YES") {
+          document.getElementById("toggle").innerHTML = "FOLLOW";
+        } else if (is_unfollow === "NO") {
+          document.getElementById("toggle").innerHTML = "UNFOLLOW";
+        }
+      }
+      async function displayProfile(first_name, last_name, email, filePath) {
+       
+        const image_path = filePath.split("/").slice(1).join("/");
+
+      
+        document.getElementById("profile").src = `/${image_path}`;
+
+        document.getElementById("full_name").innerHTML =
+          first_name + " " + last_name;
+      }
+      async function fetchTweet() {
+        const tweet_data = await fetch(`/fetchTweets/${user_id}`, {
+          method: "get",
+          headers: {
+            logintoken: `${localStorage.getItem("logintoken")}`,
+          },
+        });
+        if (tweet_data.ok) {
+          const tweet = await tweet_data.json();
+        
+          displayTweets(tweet.data);
+        }
+      }
+      async function displayTweets(tweetData) {
+        const tweetsContainer = document.getElementById("tweets-container");
+        tweetsContainer.innerHTML = "";
+        tweetData.forEach(async (tweet) => {
+          const response = await fetch(`/likesCount/${tweet.tweet_id}`, {
+            method: "get",
+            headers: {
+              logintoken: `${localStorage.getItem("logintoken")}`,
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+          
+            const likeCount = data.countResult[0].total;
+            const userLiked = data.userLiked;
+
+            let created_time = new Date(tweet.tweet_created_at);
+
+            let current_time = new Date();
+            let utc = new Date(
+              current_time.getTime() + current_time.getTimezoneOffset() * 60000
+            );
+
+            let difference_in_time = utc - created_time;
+            let hours = Math.floor(difference_in_time / (1000 * 60 * 60));
+            let minutes = Math.floor((difference_in_time / (1000 * 60)) % 60);
+          
+            let image_path = `${tweet.profile_photo}`
+              .split("/")
+              .slice(1)
+              .join("/");
+         
+            let tweet_media = `${tweet.tweet_media}`;
+           
+            let updated_tweet_media = `/media/${tweet_media}`;
+
+           
+
+            const tweetCard = document.createElement("div");
+            tweetCard.className = "tweet-card";
+
+            tweetCard.innerHTML = `
+               <div class="tweet-header">
+                  <div class="profile-info">
+                    
+                    <img src="/${image_path}" alt="Profile Photo">
+                    <h3>${tweet.first_name} ${tweet.last_name}</h3>
+                    </div>
+
+                    <div class="tweet-time">posted ${hours}hr ${minutes}min ago</div>
+                </div>
+              
+              <p>${tweet.tweet_content}</p>
+              ${
+                tweet_media == "null"
+                  ? ""
+                  : `<img style="width:500px; height:200px; border-radius:0" src="${updated_tweet_media}">`
+              }
+
+              <div class="tweet-actions">
+                 <i class="${
+                   userLiked ? "fas fa-heart like-active" : "far fa-heart"
+                 }" 
+                       onClick="toggleLike(${tweet.tweet_id}, this)"></i>
+                <span>${likeCount}</span>
+                <i
+                  class="fa fa-retweet"
+                  onClick="reTweetFunction(${tweet.tweet_id})"
+                ></i>
+              </div>
+              `;
+            tweetsContainer.appendChild(tweetCard);
+          }
+        });
+      }
+
+      async function toggleLike(tweet_id, icon) {
+        const isLiked = icon.classList.contains("like-active");
+        const url = isLiked ? `/unlike/${tweet_id}` : `/like/${tweet_id}`;
+
+        const response = await fetch(url, {
+          method: "get",
+          headers: {
+            logintoken: localStorage.getItem("logintoken"),
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const likeCount = data.countResult[0].total;
+
+          if (isLiked) {
+            icon.classList.replace("fas", "far"); // Change filled heart to regular
+            icon.classList.remove("like-active"); // Remove red color
+          } else {
+            icon.classList.replace("far", "fas"); // Change regular heart to filled
+            icon.classList.add("like-active"); // Add red color
+          }
+
+          icon.nextElementSibling.innerText = likeCount;
+        }
+      }
+      
+
+      async function reTweetFunction(tweet_id) {
+        const response = await fetch(`/retweet/${tweet_id}`, {
+          method: "get",
+          headers: {
+            logintoken: `${localStorage.getItem("logintoken")}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          window.location.href = "/home";
+        }
+      }
+
+      function redirectToHomePage() {
+        window.location.href = "/home";
+      }
+      
+      fetchTweet();
+      window.onload = () => fetchProfile();
+    </script>
+
+  </body>
+</html>

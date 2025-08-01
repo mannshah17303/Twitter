@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: #15202b;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: #192734;
+        padding: 40px;
+        border-radius: 12px;
+        width: 380px;
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+        text-align: center;
+      }
+
+      .container h1 {
+        color: #1da1f2;
+        margin-bottom: 20px;
+        font-size: 26px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #8899a6;
+        background-color: #22303c;
+        color: white;
+        font-size: 16px;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: #1da1f2;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background-color: #1da1f2;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #0d8bd9;
+      }
+
+      a {
+        display: block;
+        margin-top: 12px;
+        color: #1da1f2;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .profile-img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      #show_img {
+        display: none;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .file-upload-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 10px 0;
+      }
+
+      .custom-file-upload {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 6px;
+        background-color: #1da1f2;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        transition: background 0.3s;
+      }
+
+      .custom-file-upload:hover {
+        background-color: #0d8bd9;
+      }
+
+      #file {
+        display: none;
+      }
+
+      #file-name {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #8899a6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Sign Up</h1>
+      <div class="profile-img-container">
+        <img src="" id="show_img" alt="" />
+      </div>
+      <form id="signupForm" method="post" enctype="multipart/form-data">
+        <input
+          type="text"
+          id="fname"
+          name="fname"
+          placeholder="First Name"
+          autocomplete="off"
+        />
+        <input
+          type="text"
+          id="lname"
+          name="lname"
+          placeholder="Last Name"
+          autocomplete="off"
+        />
+        <input type="email" id="email" name="email" placeholder="Email" />
+        <input type="text" id="city" name="city" placeholder="Your City" />
+        <input
+          type="text"
+          id="mobile_number"
+          name="mobile_number"
+          placeholder="Mobile Number"
+        />
+        <div class="file-upload-container">
+          <label for="file" class="custom-file-upload"
+            >Upload Profile Picture</label
+          >
+          <input
+            type="file"
+            name="file"
+            id="file"
+            onchange="previewFunction()"
+          />
+          <span id="file-name">No file chosen</span>
+          <p id="show_message"></p>
+        </div>
+        <button type="submit">Sign Up</button>
+        <a href="/login">Already have an account? Log in</a>
+      </form>
+    </div>
+
+    <script>
+      const logintoken = localStorage.getItem("logintoken");
+      if (logintoken) {
+        window.location.href = "/home";
+      }
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", signupFunction);
+      async function signupFunction(event) {
+        event.preventDefault();
+        var input = document.getElementById("file");
+        const data = new FormData(document.getElementById("signupForm"));
+ 
+        const fetchData = await fetch("/signup", {
+          method: "POST",
+          body: data,
+        });
+
+        if (fetchData.status == 200) {
+          const responseData = await fetchData.json();
+          const token = responseData.token;
+          localStorage.setItem("signuptoken", token);
+        
+          window.location.href = "/clickkheretogeneratepassword";
+        } else {
+          const result = await fetchData.text();
+          alert(result);
+        }
+      }
+
+      function previewFunction() {
+        var input = document.getElementById("file");
+        var fileNameDisplay = document.getElementById("file-name");
+        var img = document.getElementById("show_img");
+        var fReader = new FileReader();
+        if (input.files.length > 0) {
+          var file = input.files[0];
+          var fileType = file.type;
+          fileNameDisplay.textContent = file.name;
+  
+
+          fReader.readAsDataURL(file);
+          fReader.onloadend = function (event) {
+            img.src = event.target.result;
+            img.style.display = "inline";
+            img.style.borderRadius = "50%";
+
+            img.style.marginBottom = "30px";
+            document.getElementById("show_message").innerHTML = "";
+          };
+        } else {
+          fileNameDisplay.textContent = "No file chosen";
+          input.value = "";
+          img.style.display = "none";
+          document.getElementById("show_message").innerHTML =
+            "Please upload a valid image file (PNG, JPG, or JPEG).";
+          document.getElementById("show_message").style.fontWeight = "700";
+          document.getElementById("show_message").style.color = "red";
+        }
+      }
+    </script>
+  </body>
+</html>

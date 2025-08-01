@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #15202b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #192734;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            color: #1da1f2;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #8899a6;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #1da1f2;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            background-color: #0d8bd9;
+        }
+    </style>
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Thank You for Registering!</h1>
+        <p>Please click the link below to set your password.</p>
+        
+        <a href="/generatepassword" id="generateToken">Set Password</a>
+    </div>
+</body>
+<script>
+   const signuptoken = localStorage.getItem('signuptoken');
+   document.getElementById('generateToken').href = "/generatepassword?token=" + signuptoken;
+</script>
+</html>
